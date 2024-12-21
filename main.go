@@ -1,28 +1,20 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 
-	maelstrom "github.com/jepsen-io/maelstrom/demo/go"
+	"github.com/stuckinforloop/dist/server"
 )
 
 func main() {
-	n := maelstrom.NewNode()
+	// initialize dependencies
+	srv := server.New()
 
-	n.Handle("echo", func(msg maelstrom.Message) error {
-		body := map[string]any{}
-		if err := json.Unmarshal(msg.Body, &body); err != nil {
-			return fmt.Errorf("unmarshal message: %w", err)
-		}
+	// register handlers
+	srv.RegisterHandlers()
 
-		body["type"] = "echo_ok"
-
-		return n.Reply(msg, body)
-	})
-
-	if err := n.Run(); err != nil {
+	// start maelstrom server
+	if err := srv.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
