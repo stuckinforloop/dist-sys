@@ -18,7 +18,11 @@ func New() *Server {
 }
 
 func (s *Server) RegisterHandlers() {
+	// echo workload
 	s.node.Handle(echo, s.EchoHandler)
+
+	// unique-ids workload
+	s.node.Handle(generate, s.GenerateHandler)
 }
 
 func (s *Server) Run() error {
